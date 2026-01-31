@@ -13,9 +13,15 @@ database:
   # SUPABASE_URL: your-project.supabase.co
   # SUPABASE_SERVICE_ROLE_KEY: your-service-role-key
 
+# LLM Configuration (for compression/summarization)
+llm:
+  provider: "kimi"  # kimi, openai, ollama
+  model: "moonshot-v1-8k"  # moonshot-v1-8k, 32k, 128k
+  # KIMI_API_KEY: from environment
+
 # Embedding Configuration
 embeddings:
-  provider: "openai"  # openai, local, kimi
+  provider: "openai"  # openai, local
   model: "text-embedding-ada-002"
   dimension: 1536
   # For local: all-MiniLM-L6-v2 (384 dimensions)

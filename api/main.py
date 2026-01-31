@@ -44,7 +44,26 @@ async def lifespan(app: FastAPI):
         app.state.embedding_provider = None
         print("Running without embeddings")
 
+    # Initialize LLM client (Kimi for cost savings)
+    kimi_key = os.environ.get("KIMI_API_KEY")
+    if kimi_key:
+        from agentmem.integrations.kimi import create_kimi_client
+
+        app.state.llm_client = create_kimi_client(
+            api_key=kimi_key,
+            model=os.environ.get("KIMI_MODEL", "moonshot-v1-8k"),
+        )
+        print("Using Kimi LLM (moonshot)")
+    else:
+        # Fallback to OpenAI if no Kimi key
+        app.state.llm_client = None
+        print("Running without LLM client (compression disabled)")
+
     yield
+
+    # Cleanup LLM client
+    if hasattr(app.state, "llm_client") and app.state.llm_client:
+        await app.state.llm_client.close()
 
     print("AgentMem API shutting down...")
 

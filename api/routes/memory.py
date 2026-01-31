@@ -79,6 +79,11 @@ def get_memory_manager(request: Request) -> MemoryManager:
     )
 
 
+def get_llm_client(request: Request):
+    """Get LLM client (Kimi) from app state."""
+    return getattr(request.app.state, "llm_client", None)
+
+
 def memory_to_response(memory: MemoryItem) -> MemoryResponse:
     """Convert MemoryItem to response model."""
     return MemoryResponse(
@@ -202,6 +207,7 @@ async def get_recent_memories(
 @router.post("/compress", response_model=CompressResponse)
 async def compress_memories(
     compress_data: CompressRequest,
+    request: Request,
     manager: MemoryManager = Depends(get_memory_manager),
 ):
     """
@@ -209,6 +215,8 @@ async def compress_memories(
 
     This will intelligently summarize and consolidate memories
     while preserving important information.
+
+    Uses Kimi LLM for cost-effective compression.
     """
     space = await manager.get_space(UUID(compress_data.agent_id))
 
@@ -223,8 +231,9 @@ async def compress_memories(
             memories_processed=0,
         )
 
-    # Compress
-    compressor = TokenCompressor()
+    # Compress with Kimi LLM if available
+    llm_client = get_llm_client(request)
+    compressor = TokenCompressor(llm_client=llm_client)
     results = await compressor.compress_batch(
         memories,
         target_total_tokens=int(
