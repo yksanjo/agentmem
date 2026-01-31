@@ -1,0 +1,53 @@
+# AgentMem Configuration
+# Agent Memory System
+
+server:
+  host: "0.0.0.0"
+  port: 8001
+  cors_origins:
+    - "*"
+
+# Database Configuration
+database:
+  provider: "supabase"
+  # SUPABASE_URL: your-project.supabase.co
+  # SUPABASE_SERVICE_ROLE_KEY: your-service-role-key
+
+# Embedding Configuration
+embeddings:
+  provider: "openai"  # openai, local, kimi
+  model: "text-embedding-ada-002"
+  dimension: 1536
+  # For local: all-MiniLM-L6-v2 (384 dimensions)
+
+# Memory Configuration
+memory:
+  # Short-term memory
+  short_term:
+    max_items: 100
+    ttl_seconds: 3600  # 1 hour
+
+  # Long-term memory
+  long_term:
+    consolidation_threshold: 100
+    consolidation_similarity: 0.9
+    enable_forgetting: true
+    base_retention_days: 365
+
+  # Compression
+  compression:
+    max_output_tokens: 500
+    preserve_importance_threshold: 0.8
+
+# Cache Configuration
+cache:
+  enabled: true
+  provider: "redis"  # redis, memory
+  default_ttl: 3600
+  # REDIS_URL: redis://localhost:6379
+
+# Search Configuration
+search:
+  default_limit: 10
+  min_similarity: 0.5
+  max_results: 50

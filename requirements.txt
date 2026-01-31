@@ -1,0 +1,38 @@
+# AgentMem - Agent Memory System
+# Python 3.11+
+
+# Web Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# Database
+supabase>=2.3.0
+httpx>=0.26.0
+
+# Embeddings (optional - for local embeddings)
+# sentence-transformers>=2.2.0
+# torch>=2.0.0
+
+# Vector operations
+numpy>=1.24.0
+
+# Cache (optional)
+redis>=5.0.0
+
+# Validation
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Configuration
+pyyaml>=6.0.1
+
+# Utilities
+python-dotenv>=1.0.0
+
+# Development
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+black>=24.1.0
+ruff>=0.1.0
+mypy>=1.8.0
